@@ -95,6 +95,21 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
+                # Use the versions of the mountead classes (in root.rb) not the version sent as option to add_swagger_documentation method
+                #   class V1 < Grape::API
+                #     version 'v1', :using => :path
+                #
+                #     resource :test do
+                #     end
+                #   end
+                # => returns swagger request path '/v1/test/...'
+                #   class V2 < Grape::API
+                #     version 'v2', :using => :path
+                #
+                #     resource :test do
+                #     end
+                #   end
+                # => returns swagger request path '/v2/test/...'
                 use_version = api_version == "0.1" ? route.route_version : api_version
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
