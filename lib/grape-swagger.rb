@@ -95,9 +95,10 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
+                use_version = api_version == "0.1" ? route.route_version : api_version
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
-                  :path => parse_path(route.route_path, api_version),
+                  :path => parse_path(route.route_path, use_version),
                   :operations => [operations]
                 }
               end
